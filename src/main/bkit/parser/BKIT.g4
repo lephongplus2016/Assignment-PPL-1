@@ -1,3 +1,7 @@
+/*
+Name: Le Hong Phong
+ID: 1813518
+*/
 grammar BKIT;
 
 @lexer::header {
@@ -23,7 +27,6 @@ def emit(self):
 options{
 	language=Python3;
 }
-
 //LexerSuite
 ID: [a-z][a-zA-Z0-9_]*;
 
@@ -91,12 +94,9 @@ COMMA: ',';
 
 INTEGER: BASE10|BASE16|BASE8|'0';
 //([1-9][0-9]*| '0x'[1-9A-F][0-9A-F]*| '0X'[1-9A-F][0-9A-F]*| '0o'[1-7][0-7]*| '0O'[1-7][0-7]*| '0');
-fragment 
-BASE10: ([1-9][0-9]*);
-fragment
-BASE16: ('0x'[1-9A-F][0-9A-F]*| '0X'[1-9A-F][0-9A-F]*);
-fragment
-BASE8: ('0o'[1-7][0-7]*| '0O'[1-7][0-7]*);
+fragment  BASE10: ([1-9][0-9]*);
+fragment BASE16: ('0x'[1-9A-F][0-9A-F]*| '0X'[1-9A-F][0-9A-F]*);
+fragment BASE8: ('0o'[1-7][0-7]*| '0O'[1-7][0-7]*);
 
 
 fragment EXPONENT: 	('E'|'e') '-'? [0-9]+;
@@ -131,8 +131,7 @@ fragment EscapeSequence
 	: '\\' [bfrnt'"\\] 
 	| ('\'"')
 	;
-fragment
-Character
+fragment Character
 	:	~["\\\n]
 	|	EscapeSequence
 	;
@@ -144,14 +143,50 @@ STRING
    	; 
 
 //array
-LITERALS: INTEGER| FLOAT| STRING| BOOLEAN;
-ARRAY: LEFT_CURLY_BRACKET LITERALS*(',' LITERALS)* RIGHT_CURLY_BRACKET
-		| ARRAY_2
+fragment LITERALS: INTEGER| FLOAT| STRING| BOOLEAN | ARRAY;
+ARRAY: LEFT_CURLY_BRACKET (' ')*LITERALS((' ')*',' (' ')*LITERALS)*(' ')* RIGHT_CURLY_BRACKET
+//ARRAY: LEFT_CURLY_BRACKET (' ')* (INTEGER| FLOAT | STRING| BOOLEAN | ARRAY) ((' ')*',' (' ')* (INTEGER| FLOAT | STRING| BOOLEAN | ARRAY))* (' ')* RIGHT_CURLY_BRACKET
+// {
+// dummy = str(self.text)
+// var = ""
+// for i in range(len(dummy)):
+// 	if dummy[i] != " ":
+// 		var += dummy[i]
+
+
+
+// self.text = var
+// }
+
+//kieu boolean co van de
+
+// {
+// 	self.text = self.text[1:-1]
+// }
+
+{
+	self.text = self.text.replace(" ","")	
+	self.text = self.text.replace("\"","")	
+}
+
+
 		;
-fragment ARRAY_2
-		: LEFT_CURLY_BRACKET ARRAY_2*(',' ARRAY_2)* RIGHT_CURLY_BRACKET
-		;
+// ARRAY_2
+// 		: ARRAY
+// 		| LEFT_CURLY_BRACKET (' ')*ARRAY*((' ')*',' (' ')*ARRAY)*(' ')* RIGHT_CURLY_BRACKET
 		
+// {
+// 	dummy = str(self.text)
+// 	var = ""
+// 	for i in range(len(dummy)):
+// 		if dummy[i] != " ":
+// 			var += dummy[i]
+	
+// 	self.text = var
+//}
+//		;
+	//self.text = self.text + ""
+		//self.text = self.text.replace(" ","")	
 //ERROR
 UNCLOSE_STRING
 	:	'"' Character*
@@ -192,3 +227,12 @@ UNTERMINATED_COMMENT: '**' ('*'~'*'|~'*')* ;
 ERROR_CHAR
 	:	.
 	;
+
+// ParxerSuite
+//mainprogram : declaration + EOF;
+
+//declaration: var_list
+//			| function_list 
+//			;
+
+//var_list: ()? ;

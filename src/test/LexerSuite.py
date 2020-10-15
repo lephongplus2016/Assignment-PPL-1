@@ -63,8 +63,8 @@ class LexerSuite(unittest.TestCase):
     
     def test308(self):
         """test308 """
-        self.assertTrue(TestLexer.checkLexeme(""" {1,2,3} {{1,2},{2,3}} """,""" """,308))   
-
+        self.assertTrue(TestLexer.checkLexeme(""" {"TRUE"    ,   "TRUE"  ,"TRUE" , "aabc"  }  """,""" """,308))   
+ 
     def test309(self):
         """test309 """
         self.assertTrue(TestLexer.checkLexeme(""" "He asked me: '"Where is John?'"" """,""" """,309))    

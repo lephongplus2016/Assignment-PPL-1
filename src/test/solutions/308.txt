@@ -1,1 +1,1 @@
-{1,2,3},{,{1,2},,,{2,3},},<EOF>
+{TRUE,TRUE,TRUE,aabc},<EOF>

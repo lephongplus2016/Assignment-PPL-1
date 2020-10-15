@@ -1,4 +1,4 @@
-# Generated from main/bkit/parser/BKIT.g4 by ANTLR 4.8
+# Generated from c:\Users\lepho\Desktop\BTL\ass1\assignment1\src\main\bkit\parser\BKIT.g4 by ANTLR 4.8
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -162,12 +162,6 @@ class BKITParser ( Parser ):
 
         def getRuleIndex(self):
             return BKITParser.RULE_program
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitProgram" ):
-                return visitor.visitProgram(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 

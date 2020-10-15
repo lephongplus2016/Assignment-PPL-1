@@ -8,7 +8,7 @@ class ErrorToken(LexerError):
 
 class UncloseString(LexerError):
     def __init__(self,s):
-        self.message = "Unclosed String: "+ s
+        self.message = "Unclosed String: "+ s 
 
 class IllegalEscape(LexerError):
     def __init__(self,s):
