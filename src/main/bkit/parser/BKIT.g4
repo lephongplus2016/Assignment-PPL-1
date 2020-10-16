@@ -54,7 +54,8 @@ FALSE: 'False';
 
 KEYWORDS: BODY| ELSE| ENDFOR| IF| VAR| ENDDO| BREAK| ELSEIF| ENDWHILE| PARAMETER| WHILE| CONTINUE| ENDBODY| FOR| RETURN| TRUE| DO| ENDIF| FUNCTION| THEN| FALSE;
 
-//Operators
+//Operator
+EQ: '=';
 ADD: '+';
 ADD_FLOAT: '+.'; 
 SUB: '-';
@@ -67,7 +68,7 @@ MOD: '%';
 NEGATIVE: '!';
 AND: '&&';
 OR: '||';
-COMPARE: '==';
+EQUAL: '==';
 IS_NOT_EQUAL: '!=';
 LESS: '<';
 MORE_THAN: '>';
@@ -76,7 +77,7 @@ MORE_OR_EQUAL: '>=';
 NOT_EQUAL_FLOAT: '=/=';  
 LESS_FLOAT: '<.';
 MORE_FLOAT: '>.';
-ESS_OR_EQUAL_FLOAT: '<=.';
+LESS_OR_EQUAL_FLOAT: '<=.';
 MORE_OR_EQUAL_FLOAT: '>=.';
 
 //Separators
@@ -110,22 +111,6 @@ BOOLEAN: TRUE
         | FALSE;
 
 
-//string
-/*STRING
-	:	'"' Character*? '"'
-	;
-
-fragment
-Character
-	:	~["\\\n]
-	|	EscapeSequence
-	;
-fragment
-EscapeSequence
-	:	'\\'[bfrnt'\\]
-	;        
-*/
-
 //String
 fragment EscapeSequence
 	: '\\' [bfrnt'"\\] 
@@ -143,8 +128,9 @@ STRING
    	; 
 
 //array
-fragment LITERALS: INTEGER| FLOAT| STRING| BOOLEAN | ARRAY;
-ARRAY: LEFT_CURLY_BRACKET (' ')*LITERALS((' ')*',' (' ')*LITERALS)*(' ')* RIGHT_CURLY_BRACKET
+fragment LITERALS: INTEGER| FLOAT| STRING| BOOLEAN | ARRAY|;
+//ARRAY: LEFT_CURLY_BRACKET (' ')*LITERALS((' ')*',' (' ')*LITERALS)*(' ')* RIGHT_CURLY_BRACKET
+ARRAY: LEFT_CURLY_BRACKET WS*LITERALS(WS*',' WS*LITERALS)*WS* RIGHT_CURLY_BRACKET
 //ARRAY: LEFT_CURLY_BRACKET (' ')* (INTEGER| FLOAT | STRING| BOOLEAN | ARRAY) ((' ')*',' (' ')* (INTEGER| FLOAT | STRING| BOOLEAN | ARRAY))* (' ')* RIGHT_CURLY_BRACKET
 // {
 // dummy = str(self.text)
@@ -158,7 +144,6 @@ ARRAY: LEFT_CURLY_BRACKET (' ')*LITERALS((' ')*',' (' ')*LITERALS)*(' ')* RIGHT_
 // self.text = var
 // }
 
-//kieu boolean co van de
 
 // {
 // 	self.text = self.text[1:-1]
@@ -167,26 +152,14 @@ ARRAY: LEFT_CURLY_BRACKET (' ')*LITERALS((' ')*',' (' ')*LITERALS)*(' ')* RIGHT_
 {
 	self.text = self.text.replace(" ","")	
 	self.text = self.text.replace("\"","")	
+	self.text = self.text.replace("\n","")	
+	self.text = self.text.replace("\t","")	
+	self.text = self.text.replace("\r","")	
 }
 
 
 		;
-// ARRAY_2
-// 		: ARRAY
-// 		| LEFT_CURLY_BRACKET (' ')*ARRAY*((' ')*',' (' ')*ARRAY)*(' ')* RIGHT_CURLY_BRACKET
-		
-// {
-// 	dummy = str(self.text)
-// 	var = ""
-// 	for i in range(len(dummy)):
-// 		if dummy[i] != " ":
-// 			var += dummy[i]
-	
-// 	self.text = var
-//}
-//		;
-	//self.text = self.text + ""
-		//self.text = self.text.replace(" ","")	
+
 //ERROR
 UNCLOSE_STRING
 	:	'"' Character*
@@ -205,7 +178,7 @@ ILLEGAL_ESCAPE
 
 
 
-program  : VAR COLON ID SEMI EOF ;
+//program  : VAR COLON ID SEMI EOF ;
 
 //ID: [a-z]+ ; 
 
@@ -229,10 +202,72 @@ ERROR_CHAR
 	;
 
 // ParxerSuite
-//mainprogram : declaration + EOF;
+program : declaration EOF;
 
-//declaration: var_list
-//			| function_list 
-//			;
+declaration: var_list* function_list+ 
+			;
 
-//var_list: ()? ;
+var_list: ('Var: ' many_var SEMI ) ;
+// many_var: one_var many_var
+// 			 | one_var ;
+
+many_var: id_list  ; 
+
+// Function Declaration
+function_list: FUNCTION COLON function_name param? function_body ;
+
+function_name: ID;
+
+function_body: BODY COLON  statement? ENDBODY DOT;
+
+param: (PARAMETER COLON one_param many_param) 
+		;
+
+many_param: (COMMA one_param many_param)? 
+			;
+
+one_param:  id_list  
+		;
+
+id_list: ID (COMMA ID EQ (INTEGER|BOOLEAN| FLOAT| STRING))*  (COMMA ID)* 
+		;
+
+// type value
+primitive_type: INTEGER|BOOLEAN| FLOAT| STRING;
+
+array_type: LEFT_CURLY_BRACKET (value (COMMA value)*) RIGHT_CURLY_BRACKET;
+
+value: array_type|INTEGER|BOOLEAN| FLOAT| STRING; 
+
+statement: ID;
+
+integer_arithmetic_type : SUB |ADD| MUL| DIVISION
+			| MOD;
+integer_relation_type :	 EQUAL| IS_NOT_EQUAL
+			| LESS| MORE_THAN| LESS_OR_EQUAL| MORE_OR_EQUAL ;
+
+float_arithmetic_type: ADD_FLOAT| SUB_FLOAT| MUL_FLOAT| DIVISION_FLOAT
+			;
+float_relation_type:	 NOT_EQUAL_FLOAT| LESS_FLOAT
+			| MORE_FLOAT| MORE_OR_EQUAL_FLOAT| LESS_OR_EQUAL_FLOAT ;
+
+bool_type: NEGATIVE| AND| OR ;
+
+function_call: function_name '(' id_list? ')' ;
+
+
+
+// Expressions
+exp: function_call exp1 ;
+
+exp1: COMMA exp1
+	| exp2 ;
+
+exp2: SUB exp2 // sign 
+	| SUB_FLOAT exp2 //sign float 
+	| exp3 ;
+
+exp3: NEGATIVE exp3 
+	| exp4 ;
+
+exp4: 

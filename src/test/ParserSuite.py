@@ -13,3 +13,10 @@ class ParserSuite(unittest.TestCase):
         input = """Var: ;"""
         expect = "Error on line 1 col 5: ;"
         self.assertTrue(TestParser.checkParser(input,expect,202))
+
+    def test401(self):
+        """tesst 401"""
+        input = """Var: x,y,z; Function: haha
+        Body: EndBody."""
+        expect = "Error on line 1 col 5: ;"
+        self.assertTrue(TestParser.checkParser(input,expect,401))
