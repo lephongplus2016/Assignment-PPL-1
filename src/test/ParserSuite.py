@@ -20,3 +20,24 @@ class ParserSuite(unittest.TestCase):
         Body: EndBody."""
         expect = "Error on line 1 col 5: ;"
         self.assertTrue(TestParser.checkParser(input,expect,401))
+
+    def test402(self):
+        """test 402"""
+        input = """Var: x;
+
+ Function: fact
+    Parameter: n
+    Body: 
+       If n==0 Then 
+       Return 1;
+         Else
+        Return n*fact(n-1);
+         EndIf.
+         EndBody.
+ Function: main
+     Body:
+         x=10;
+       fact(x);
+                EndBody. """
+        expect = "successful"
+        self.assertTrue(TestParser.checkParser(input,expect,402))

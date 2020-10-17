@@ -55,7 +55,7 @@ FALSE: 'False';
 KEYWORDS: BODY| ELSE| ENDFOR| IF| VAR| ENDDO| BREAK| ELSEIF| ENDWHILE| PARAMETER| WHILE| CONTINUE| ENDBODY| FOR| RETURN| TRUE| DO| ENDIF| FUNCTION| THEN| FALSE;
 
 //Operator
-EQ: '=';
+ASSIGN: '=';
 ADD: '+';
 ADD_FLOAT: '+.'; 
 SUB: '-';
@@ -218,7 +218,7 @@ function_list: FUNCTION COLON function_name param? function_body ;
 
 function_name: ID;
 
-function_body: BODY COLON  statement? ENDBODY DOT;
+function_body: BODY COLON var_list* (statement)* ENDBODY DOT;
 
 param: (PARAMETER COLON one_param many_param) 
 		;
@@ -229,9 +229,11 @@ many_param: (COMMA one_param many_param)?
 one_param:  id_list  
 		;
 
-id_list: ID (COMMA ID EQ (INTEGER|BOOLEAN| FLOAT| STRING))*  (COMMA ID)* 
-		;
+id_list: (ID|array_index| ID ASSIGN exp) (COMMA (ID|array_index| ID ASSIGN exp))*;
 
+// Statement
+statement: assign| if_statement| white_statement| for_statement| do_white_statement 
+			 | break_statement| continue_statement| call_statement | function_call| return_statement;
 // type value
 primitive_type: INTEGER|BOOLEAN| FLOAT| STRING;
 
@@ -239,7 +241,7 @@ array_type: LEFT_CURLY_BRACKET (value (COMMA value)*) RIGHT_CURLY_BRACKET;
 
 value: array_type|INTEGER|BOOLEAN| FLOAT| STRING; 
 
-statement: ID;
+
 
 integer_arithmetic_type : SUB |ADD| MUL| DIVISION
 			| MOD;
@@ -253,21 +255,103 @@ float_relation_type:	 NOT_EQUAL_FLOAT| LESS_FLOAT
 
 bool_type: NEGATIVE| AND| OR ;
 
-function_call: function_name '(' id_list? ')' ;
+function_call: function_name LEFT_ROUND_BRACKET (exp(COMMA exp)*)? RIGHT_ROUND_BRACKET ;
+			// id_list
 
+array_index: ID (LEFT_SQUARE_BRACKET (exp2|array_index) RIGHT_SQUARE_BRACKET)+ ;
+
+index:  (LEFT_SQUARE_BRACKET (exp2|array_index) RIGHT_SQUARE_BRACKET)+ ;
+
+assign: (ID|array_index) ASSIGN exp SEMI;
+
+if_statement: IF exp THEN statement*
+				( ELSEIF exp THEN statement*)*
+				( ELSE (exp| return_statement) )? ENDIF DOT;
+
+for_statement: FOR LEFT_ROUND_BRACKET ID ASSIGN exp COMMA exp2 COMMA INTEGER RIGHT_ROUND_BRACKET
+			DO statement* ENDFOR  DOT;
+
+white_statement: WHILE exp DO statement* ENDWHILE DOT;
+
+do_white_statement: DO statement* WHILE exp ENDDO DOT;
+
+break_statement: BREAK SEMI;
+
+continue_statement: CONTINUE SEMI; // khai bao trung ten voi token lexer se bi loi
+
+call_statement: ID LEFT_ROUND_BRACKET (exp(COMMA exp)*)? RIGHT_ROUND_BRACKET SEMI;
+
+return_statement: RETURN exp SEMI 
+				| RETURN call_statement	;
 
 
 // Expressions
-exp: function_call exp1 ;
 
-exp1: COMMA exp1
-	| exp2 ;
+exp: exp1 EQUAL exp1
+	| exp1 IS_NOT_EQUAL exp1
+	| exp1 LESS exp1
+	| exp1 MORE_THAN exp1
+	| exp1 LESS_OR_EQUAL exp1
+	| exp1 MORE_OR_EQUAL exp1
+	| exp1 NOT_EQUAL_FLOAT exp1
+	| exp1 LESS_FLOAT exp1
+	| exp1 MORE_FLOAT exp1
+	| exp1 LESS_OR_EQUAL_FLOAT exp1
+	| exp1 MORE_OR_EQUAL_FLOAT exp1 
+	| exp1;
 
-exp2: SUB exp2 // sign 
-	| SUB_FLOAT exp2 //sign float 
+exp1: exp1 AND exp2
+	| exp1 OR exp2
+	| exp2
+	;
+
+exp2: exp2 ADD exp3
+	| exp2 ADD_FLOAT exp3
+	| exp2 SUB exp3
+	| exp2 SUB_FLOAT exp3
 	| exp3 ;
 
-exp3: NEGATIVE exp3 
-	| exp4 ;
+exp3: exp3 MUL exp5
+	| exp3 MUL_FLOAT exp5
+	| exp3 DIVISION exp5
+	| exp3 DIVISION_FLOAT exp5
+	| exp3 MOD exp5
+	| exp5
+	;
 
-exp4: 
+exp5: NEGATIVE exp5 
+	| exp6 ;
+
+exp6: SUB exp6 // sign 
+	| SUB_FLOAT exp6 //sign float 
+	| exp7 ;
+
+exp7: exp7 index 
+	| exp8 ;
+
+exp8: function_call exp8 
+	| call_statement exp8
+	| exp9; // 6*(2+3)
+
+exp9: LEFT_ROUND_BRACKET exp RIGHT_ROUND_BRACKET
+	|INTEGER| FLOAT| STRING| BOOLEAN| ID | function_call| array_index;
+
+// COERIONS
+int_of_float: 'int_of_float' LEFT_ROUND_BRACKET FLOAT RIGHT_ROUND_BRACKET ;
+
+float_to_int: 'float_to_int' LEFT_ROUND_BRACKET INTEGER RIGHT_ROUND_BRACKET ;
+
+int_of_string: 'int_of_string' LEFT_ROUND_BRACKET STRING RIGHT_ROUND_BRACKET ;
+
+string_of_int: 'string_of_int' LEFT_ROUND_BRACKET INTEGER RIGHT_ROUND_BRACKET ;
+
+float_to_string: 'float_to_string' LEFT_ROUND_BRACKET STRING RIGHT_ROUND_BRACKET ;
+
+string_of_float: 'string_of_float' LEFT_ROUND_BRACKET FLOAT RIGHT_ROUND_BRACKET ;
+
+bool_of_string: 'bool_of_string' LEFT_ROUND_BRACKET STRING RIGHT_ROUND_BRACKET ;
+
+string_of_bool: 'string_of_bool' LEFT_ROUND_BRACKET BOOLEAN RIGHT_ROUND_BRACKET ;
+
+
+

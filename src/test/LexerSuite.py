@@ -29,46 +29,16 @@ class LexerSuite(unittest.TestCase):
         """test normal string with escape"""
         self.assertTrue(TestLexer.checkLexeme(""" "ab'"c\\n def"  ""","""ab'"c\\n def,<EOF>""",107))
 
-    def test301(self):
-        """test301"""
-        self.assertTrue(TestLexer.checkLexeme("""#""","""Error Token #""",301))
+    def test_error_token(self):
+        """test error token"""
+        self.assertTrue(TestLexer.checkLexeme("""#""","""Error Token #""",108))
+        self.assertTrue(TestLexer.checkLexeme(""" "khoa hoc may tinh" #""","""khoa hoc may tinh,Error Token #""",109))
+        self.assertTrue(TestLexer.checkLexeme(""" khoa hoc may tinh_# ""","""khoa,hoc,may,tinh_,Error Token #""",110))
+        self.assertTrue(TestLexer.checkLexeme(""" khoahoc@maytinh ""","""khoahoc,Error Token @""",111))
+        self.assertTrue(TestLexer.checkLexeme(""" ^aaaaa ""","""Error Token ^""",112))
 
     def test302(self):
         """test302"""
-        self.assertTrue(TestLexer.checkLexeme("""" abc ""","""Unclosed String: " abc """,302))
-
-    def test303(self):
-        """test303- add"""
-        self.assertTrue(TestLexer.checkLexeme(""" 1+2==3 ""","""1,+,2,==,3,<EOF>""",303))
-
-    def test304(self):
-        """test304- UNTERMINATED_COMMENT ---"""
-        self.assertTrue(TestLexer.checkLexeme(""" ** lelel lkfkl 123 ""","""Unterminated Comment""",304))   
-
-    def test305(self):
-        """test305- UNTERMINATED_COMMENT 2 ---"""
-        self.assertTrue(TestLexer.checkLexeme(""" **lelel lkfkl 123 * ""","""Unterminated Comment""",305))       
-
-    def test306(self):
-        """test306- COMMENT 2 ---"""
-        self.assertTrue(TestLexer.checkLexeme(""" **lelel lkfkl 123
-        * dfsdf
-        dsfsdfdsf 
-         ** ""","""<EOF>""",306))     
-
-    def test307(self):
-        """test307"""
-        self.assertTrue(TestLexer.checkLexeme(""" {[(12.55; 12.5e-12)]} true ""","""{,[,(,12.55,;,12.5e-12,),],},true,<EOF>""",307))  
+        self.assertTrue(TestLexer.checkLexeme("""" abc ""","""Unclosed String:  abc """,113))
 
     
-    def test308(self):
-        """test308 """
-        self.assertTrue(TestLexer.checkLexeme(""" {"TRUE"    ,   "TRUE"  ,"TRUE" , "aabc" \n  }  """,""" """,308))   
- 
-    def test309(self):
-        """test309 """
-        self.assertTrue(TestLexer.checkLexeme(""" "He asked me: '"Where is John?'"" """,""" """,309))    
-
-    def test310(self):
-        """test310"""
-        self.assertTrue(TestLexer.checkLexeme(""" {{1,2}, {3,4}} """,""" """,310))
