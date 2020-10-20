@@ -1,7 +1,7 @@
 
         Var: x=1.25, y= "True";
         Function: main
-        Parameter: n, m=5
+        Parameter: n, m
         Body:
         printf("Hello");
         EndBody.

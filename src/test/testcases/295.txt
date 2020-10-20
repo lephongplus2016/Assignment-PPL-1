@@ -1,0 +1,12 @@
+
+       Function: test Parameter: k
+			Body:
+            Var: j;
+			For (j=1,n<k,6) Do
+				 If (x==True) Then
+				   ElseIf k==n Then 
+				   Else test(k+1); 
+				  EndIf.
+            EndFor.
+			EndBody.
+        

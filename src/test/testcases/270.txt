@@ -1,0 +1,9 @@
+
+        Var: x,y,z;
+        Function: main Parameter: a
+        Body:
+           write("Tinh dien tich hinh chu nhat");
+           a=x*y;
+           printf(a);
+        EndBody.
+        

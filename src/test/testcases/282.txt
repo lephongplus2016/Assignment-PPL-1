@@ -1,0 +1,26 @@
+
+        Var: a,b,c;
+        Function: main 
+        Body:
+          read(a,b,c);
+        EndBody.
+
+        Function: main2 
+        Body:
+        If((a*a==1) || (c*c==1)) Then
+            write("a=b=c=1");
+        EndIf.
+        EndBody.
+
+        Function: main3 
+        Body:
+        write("khong la boi so");
+      
+        EndBody.
+        Function: main3 
+        Body: write("khong la boi so");EndBody.
+        Function: main4 
+        Body: write("khong la boi so");EndBody.
+        Function: main5 
+        Body: write("khong la boi so");EndBody.
+        

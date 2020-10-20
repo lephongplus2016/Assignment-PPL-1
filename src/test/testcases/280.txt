@@ -1,0 +1,11 @@
+
+        Var: a,b,c;
+        Function main Parameter: d
+        Body:
+          read(a,b,c);
+        If((a*a==1) || (c*c==1)) Then
+            write("a=b=c=1");
+        Else write("khong la boi so");
+        EndIf.
+        EndBody.
+        

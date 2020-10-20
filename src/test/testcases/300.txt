@@ -1,0 +1,6 @@
+
+       Function: mysqr Parameter: x
+			Body:
+				result = sqr(x) - 1;
+			EndBody.
+        

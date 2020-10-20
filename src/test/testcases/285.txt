@@ -1,0 +1,7 @@
+
+        Var: a,b,c;
+        Function: main Parameter: d
+        Body:
+        s = "True";
+        EndBody.
+        

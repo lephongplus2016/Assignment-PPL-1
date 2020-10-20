@@ -94,7 +94,7 @@ COMMA: ',';
 //Literals
 
 INTEGER: BASE10|BASE16|BASE8|'0';
-//([1-9][0-9]*| '0x'[1-9A-F][0-9A-F]*| '0X'[1-9A-F][0-9A-F]*| '0o'[1-7][0-7]*| '0O'[1-7][0-7]*| '0');
+
 fragment  BASE10: ([1-9][0-9]*);
 fragment BASE16: ('0x'[1-9A-F][0-9A-F]*| '0X'[1-9A-F][0-9A-F]*);
 fragment BASE8: ('0o'[1-7][0-7]*| '0O'[1-7][0-7]*);
@@ -130,25 +130,8 @@ STRING
 
 //array
 fragment LITERALS: INTEGER| FLOAT| STRING| BOOLEAN | ARRAY|;
-//ARRAY: LEFT_CURLY_BRACKET (' ')*LITERALS((' ')*',' (' ')*LITERALS)*(' ')* RIGHT_CURLY_BRACKET
+
 ARRAY: LEFT_CURLY_BRACKET WS*LITERALS(WS*',' WS*LITERALS)*WS* RIGHT_CURLY_BRACKET
-//ARRAY: LEFT_CURLY_BRACKET (' ')* (INTEGER| FLOAT | STRING| BOOLEAN | ARRAY) ((' ')*',' (' ')* (INTEGER| FLOAT | STRING| BOOLEAN | ARRAY))* (' ')* RIGHT_CURLY_BRACKET
-// {
-// dummy = str(self.text)
-// var = ""
-// for i in range(len(dummy)):
-// 	if dummy[i] != " ":
-// 		var += dummy[i]
-
-
-
-// self.text = var
-// }
-
-
-// {
-// 	self.text = self.text[1:-1]
-// }
 
 {
 	self.text = self.text.replace(" ","")	
@@ -157,7 +140,6 @@ ARRAY: LEFT_CURLY_BRACKET WS*LITERALS(WS*',' WS*LITERALS)*WS* RIGHT_CURLY_BRACKE
 	self.text = self.text.replace("\t","")	
 	self.text = self.text.replace("\r","")	
 }
-
 
 		;
 
@@ -176,25 +158,13 @@ ILLEGAL_ESCAPE
 	}
 	;
 
-
-
-
-//program  : VAR COLON ID SEMI EOF ;
-
-//ID: [a-z]+ ; 
-
 SEMI: ';' ;
-
-//COLON: ':' ;
-
-//VAR: 'Var' ;
 
 WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
 
 BLOCK_COMMENT
 	:	'**'.*? '**'		-> skip
 	;
-
 
 UNTERMINATED_COMMENT: '**' ('*'~'*'|~'*')* ;
 
@@ -209,8 +179,6 @@ declaration: var_list* function_list+
 			;
 
 var_list: ('Var: ' many_var SEMI ) ;
-// many_var: one_var many_var
-// 			 | one_var ;
 
 many_var: id_list  ; 
 
@@ -227,10 +195,9 @@ param: (PARAMETER COLON one_param many_param)
 many_param: (COMMA one_param many_param)? 
 			;
 
-one_param:  id_list  
-		;
+one_param:  (ID|array_index) (COMMA (ID|array_index))*;
 
-id_list: (ID|array_index| ID ASSIGN exp) (COMMA (ID|array_index| ID ASSIGN exp))*;
+id_list: (ID|array_index| ID ASSIGN exp| ID ASSIGN (TRUE|FALSE)) (COMMA (ID|array_index| ID ASSIGN exp| ID ASSIGN (TRUE|FALSE) ))*;
 
 // Statement
 statement: assign| if_statement| white_statement| for_statement| do_white_statement 
@@ -263,13 +230,14 @@ array_index: ID (LEFT_SQUARE_BRACKET (exp2|array_index) RIGHT_SQUARE_BRACKET)+ ;
 
 index:  (LEFT_SQUARE_BRACKET (exp2|array_index) RIGHT_SQUARE_BRACKET)+ ;
 
-assign: (ID|array_index) ASSIGN exp SEMI;
+assign: (ID|array_index) ASSIGN exp SEMI
+		| (ID|array_index) ASSIGN (TRUE|FALSE) SEMI;
 
 if_statement: IF exp THEN statement*
 				( ELSEIF exp THEN statement*)*
 				( ELSE (exp| return_statement| statement) )? ENDIF DOT;
 
-for_statement: FOR LEFT_ROUND_BRACKET ID ASSIGN exp COMMA exp2 COMMA INTEGER RIGHT_ROUND_BRACKET
+for_statement: FOR LEFT_ROUND_BRACKET ID ASSIGN exp COMMA exp COMMA INTEGER RIGHT_ROUND_BRACKET
 			DO statement* ENDFOR  DOT;
 
 white_statement: WHILE exp DO statement* ENDWHILE DOT;
@@ -283,7 +251,8 @@ continue_statement: CONTINUE SEMI; // khai bao trung ten voi token lexer se bi l
 call_statement: ID LEFT_ROUND_BRACKET (exp(COMMA exp)*)? RIGHT_ROUND_BRACKET SEMI;
 
 return_statement: RETURN exp SEMI 
-				| RETURN call_statement	;
+				| RETURN call_statement	
+				| RETURN assign;
 
 
 // Expressions
@@ -332,7 +301,7 @@ exp7: exp7 index
 
 exp8: function_call exp8 
 	| call_statement exp8
-	| exp9; // 6*(2+3)
+	| exp9; 
 
 exp9: LEFT_ROUND_BRACKET exp RIGHT_ROUND_BRACKET
 	|INTEGER| FLOAT| STRING| BOOLEAN| ID | function_call| array_index| ARRAY;

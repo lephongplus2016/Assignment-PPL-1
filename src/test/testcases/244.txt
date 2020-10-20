@@ -1,0 +1,7 @@
+
+        Var: x,y,z;
+        Function: main Parameter: a
+        Body:
+         Do x= y+1;While(a>1) EndDo.
+        EndBody.
+        

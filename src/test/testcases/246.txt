@@ -1,0 +1,12 @@
+
+        Var: x,y,z;
+        Function: main Parameter: a
+        Body:
+         Do x= y+1;
+                Do z= y+1;
+                    Do z= y+3;
+                    While(a>9) EndDo.
+                While(a>6) EndDo.
+         While(a>1) EndDo.
+        EndBody.
+        

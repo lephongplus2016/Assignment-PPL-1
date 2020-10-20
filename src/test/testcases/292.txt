@@ -1,0 +1,8 @@
+
+       Function: test Parameter: k
+			Body:
+            Var: j;
+			
+				 j="Integer"+"Integer";
+			EndBody.
+        

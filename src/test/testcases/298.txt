@@ -1,0 +1,7 @@
+
+       Function: test Parameter: k
+			Body:
+                exit();
+					inc(x);
+			EndBody.
+        

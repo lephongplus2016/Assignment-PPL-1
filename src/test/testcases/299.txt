@@ -1,0 +1,7 @@
+
+       Function: test Parameter: k
+			Body:
+            write("Press any key when ready ...");
+			  read();
+			EndBody.
+        

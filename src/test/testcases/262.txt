@@ -1,0 +1,11 @@
+
+        Var: x,y,z;
+        Function: main Parameter: x
+        Body:
+        If(x>1) Then x = y; 
+        If (y>2) Then y=6;
+        EndIf.
+        Break;
+        Else x = z; EndIf.
+        EndBody.
+        

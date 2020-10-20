@@ -1,0 +1,8 @@
+
+        Var: a,b,c;
+        Var: f[2][2];
+        Function: main Parameter: d
+        Body:
+        s = foo()+5;
+        EndBody.
+        
