@@ -1,0 +1,1 @@
+ switch (tr) {case 1:cout<<"C";break; case 2:cout<<"CC";break;} 

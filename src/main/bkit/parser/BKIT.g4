@@ -115,6 +115,7 @@ BOOLEAN: TRUE
 fragment EscapeSequence
 	: '\\' [bfrnt'"\\] 
 	| ('\'"')
+	| '\\b'
 	;
 fragment Character
 	:	~["\\\n]
@@ -191,7 +192,7 @@ SEMI: ';' ;
 WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
 
 BLOCK_COMMENT
-	:	'**'.*?'**'		-> skip
+	:	'**'.*? '**'		-> skip
 	;
 
 
