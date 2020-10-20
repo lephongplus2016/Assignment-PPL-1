@@ -1,0 +1,9 @@
+
+        Var: x,y,z;
+        Function: main Parameter: x
+        Body:
+        If(x>1) Then x = y; 
+        ElseIf x>=. 1.25 Then x= x+1;
+        Else sub(x); EndIf.
+        EndBody.
+        

@@ -1,0 +1,8 @@
+
+        Var: x,y=5, s="phongle";
+        Function: main
+        Parameter: n, m=5
+        Body:
+        printf("Hello");
+        EndBody.
+        

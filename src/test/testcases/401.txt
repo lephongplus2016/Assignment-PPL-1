@@ -1,2 +1,0 @@
-Var: x,y,z; Function: haha
-        Body: EndBody.

@@ -1,0 +1,8 @@
+
+        Var: x,y,z;
+        Function: main
+        Body:
+        printf("Hello");
+        3=x;
+        EndBody.
+        

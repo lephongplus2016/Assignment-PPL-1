@@ -1,0 +1,8 @@
+
+        Var: x,y,z;
+        Function: main Parameter: x
+        Body:
+        If(x>1) Then x = y; 
+        Else x = z; EndIf.
+        EndBody.
+        

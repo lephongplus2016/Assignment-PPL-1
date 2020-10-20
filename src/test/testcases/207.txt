@@ -1,0 +1,8 @@
+
+        Var: x;
+        Function: main
+        Parameter: n
+        Body:
+        printf("Hello");
+        EndBody.
+        

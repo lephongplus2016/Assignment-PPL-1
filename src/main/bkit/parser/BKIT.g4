@@ -32,7 +32,7 @@ ID: [a-z][a-zA-Z0-9_]*;
 
 BODY: 'Body';
 ELSE: 'Else';
-ENDFOR: 'Endfor';
+ENDFOR: 'EndFor';
 IF: 'If';
 VAR: 'Var';
 ENDDO: 'EndDo';
@@ -104,7 +104,7 @@ fragment EXPONENT: 	('E'|'e') '-'? [0-9]+;
 FLOAT
 	: [0-9]+ EXPONENT
 	| [0-9]+ '.' ([0-9]* EXPONENT)?
-	| [0-9]* '.' [0-9]+ EXPONENT?
+	| [0-9]+ '.' ([0-9]+ EXPONENT?)?
 	;
 
 BOOLEAN: TRUE
@@ -267,7 +267,7 @@ assign: (ID|array_index) ASSIGN exp SEMI;
 
 if_statement: IF exp THEN statement*
 				( ELSEIF exp THEN statement*)*
-				( ELSE (exp| return_statement) )? ENDIF DOT;
+				( ELSE (exp| return_statement| statement) )? ENDIF DOT;
 
 for_statement: FOR LEFT_ROUND_BRACKET ID ASSIGN exp COMMA exp2 COMMA INTEGER RIGHT_ROUND_BRACKET
 			DO statement* ENDFOR  DOT;
@@ -335,7 +335,7 @@ exp8: function_call exp8
 	| exp9; // 6*(2+3)
 
 exp9: LEFT_ROUND_BRACKET exp RIGHT_ROUND_BRACKET
-	|INTEGER| FLOAT| STRING| BOOLEAN| ID | function_call| array_index;
+	|INTEGER| FLOAT| STRING| BOOLEAN| ID | function_call| array_index| ARRAY;
 
 // COERIONS
 int_of_float: 'int_of_float' LEFT_ROUND_BRACKET FLOAT RIGHT_ROUND_BRACKET ;

@@ -1,0 +1,7 @@
+
+        Var: x,y,z;
+        Function: main Parameter: a
+        Body:
+        While(a>1) Do EndWhile.
+        EndBody.
+        

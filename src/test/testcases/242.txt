@@ -1,0 +1,11 @@
+
+        Var: x,y,z;
+        Function: main Parameter: a
+        Body:
+        While(a>1) Do x= y+1;
+            While(x>1) Do x= y+2;
+        
+            EndWhile.
+         EndWhile.
+        EndBody.
+        

@@ -5,7 +5,7 @@ class LexerSuite(unittest.TestCase):
       
     def test_lower_identifier(self):
         """test identifiers"""
-        self.assertTrue(TestLexer.checkLexeme("abc","abc,<EOF>",101))
+        self.assertTrue(TestLexer.checkLexeme(""" switch (tr) {case 1:cout<<"C";break; case 2:cout<<"CC";break;} ""","""switch,(,tr,),{,case,1,:,cout,<,<,C,;,break,;,case,2,:,cout,<,<,CC,;,break,;,},<EOF>""",101))
 
     def test_lower_upper_id(self):
         self.assertTrue(TestLexer.checkLexeme("Var","Var,<EOF>",102))
@@ -38,7 +38,7 @@ class LexerSuite(unittest.TestCase):
         self.assertTrue(TestLexer.checkLexeme(""" ^aaaaa ""","""Error Token ^""",112))
 
     def test113(self):
-        """test302"""
+        """test113"""
         self.assertTrue(TestLexer.checkLexeme("""" abc ""","""Unclosed String:  abc """,113))
 
     def test_id(self):
@@ -81,8 +81,8 @@ class LexerSuite(unittest.TestCase):
         self.assertTrue(TestLexer.checkLexeme(""" 0.25 ""","""0.25,<EOF>""",140))
         self.assertTrue(TestLexer.checkLexeme(""" 9.0e3 ""","""9.0e3,<EOF>""",141))
         self.assertTrue(TestLexer.checkLexeme(""" 9.00000e6 ""","""9.00000e6,<EOF>""",142))
-        self.assertTrue(TestLexer.checkLexeme(""" .123 """,""".123,<EOF>""",143))
-        self.assertTrue(TestLexer.checkLexeme(""" .1e2 """,""".1e2,<EOF>""",144))
+        self.assertTrue(TestLexer.checkLexeme(""" .123 """,""".,123,<EOF>""",143))
+        self.assertTrue(TestLexer.checkLexeme(""" 0.1e2 ""","""0.1e2,<EOF>""",144))
         self.assertTrue(TestLexer.checkLexeme(""" 9.025e-2 ""","""9.025e-2,<EOF>""",145))
         self.assertTrue(TestLexer.checkLexeme(""" 9.e-10 ""","""9.e-10,<EOF>""",146))
         self.assertTrue(TestLexer.checkLexeme(""" 9000. ""","""9000.,<EOF>""",147))   
@@ -166,7 +166,7 @@ class LexerSuite(unittest.TestCase):
 
         self.assertTrue(TestLexer.checkLexeme(""" for (double double i = 0; i < n; i ++)\n  ""","""for,(,double,double,i,=,0,;,i,<,n,;,i,+,+,),<EOF>""",200))
 
-        self.assertTrue(TestLexer.checkLexeme(""" switch (tr) {case 1:cout<<"C";break; case 2:cout<<"CC";break;} ""","""switch,(,tr,),{,case,1,:,cout,<,<,C,;,break,;,case,2,:,cout,<,<,CC,;,break,;,},<EOF>""",201))
+        
 
   
 

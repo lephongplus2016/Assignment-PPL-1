@@ -1,0 +1,9 @@
+
+        Var: x,y=5;
+        Function: main
+        Parameter: n, m=5
+        Var: i,j;
+        Body:
+        printf("Hello");
+        EndBody.
+        

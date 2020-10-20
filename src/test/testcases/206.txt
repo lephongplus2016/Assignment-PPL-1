@@ -1,0 +1,6 @@
+Function: main
+        Body:
+        Parameter: n;
+        printf("Hello");
+        EndBody.
+        

@@ -1,0 +1,8 @@
+
+        Var: x,y,z;
+        Function: main
+        Body:
+        printf("Hello");
+        x=3*5+4*-6;
+        EndBody.
+        
